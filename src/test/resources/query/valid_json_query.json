@@ -1,0 +1,34 @@
+{
+  "size": 0,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "exists": {
+            "field": "grade",
+            "boost": 1
+          }
+        }
+      ],
+      "adjust_pure_negative": true,
+      "boost": 1
+    }
+  },
+  "aggregations": {
+    "the_name": {
+      "terms": {
+        "field": "name",
+        "order": {
+          "grade_avg": "desc"
+        }
+      },
+      "aggregations": {
+        "grade_avg": {
+          "avg": {
+            "field": "grade"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+plugins {
+    id 'java-library'
+    id 'jacoco'
+    id 'maven-publish'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+group = 'com.imti'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+dependencies {
+    implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.7.1'
+    implementation 'org.apache.commons:commons-lang3:3.10'
+    implementation 'org.apache.logging.log4j:log4j-core:2.13.1'
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.assertj:assertj-core:3.15.0'
+}
+
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.89
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['org.gradle.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.99
+            }
+        }
+    }
+}
